@@ -166,11 +166,11 @@ CollectionAPI._requestListener.prototype._requestMethodAllowed = function (metho
 CollectionAPI._requestListener.prototype._beforeHandling = function (method) {
   var self = this;
   var collectionOptions = self._server._collectionOptions(self._requestPath);
-  
+
   if (collectionOptions && collectionOptions.before && collectionOptions.before[method] &&  _.isFunction(collectionOptions.before[method])) {
     return collectionOptions.before[method].apply(self, _.rest(arguments));
   }
-  
+
   return true;
 }
 
@@ -187,14 +187,14 @@ CollectionAPI._requestListener.prototype._getRequest = function(fromPutRequest) 
       collection_result.forEach(function(record) {
         records.push(record);
       });
-      
+
       if(!self._beforeHandling('GET',  self._requestPath.collectionId, records)) {
         if (fromPutRequest) {
           return records.length ? self._noContentResponse() : self._notFoundResponse('No Record(s) Found');
         }
         return self._rejectedResponse("Could not get that collection/object.");
       }
-      
+
       records = _.compact(records);
 
       if (records.length === 0) {
@@ -228,7 +228,7 @@ CollectionAPI._requestListener.prototype._putRequest = function() {
     self._server._fiber(function() {
       try {
         var obj = JSON.parse(requestData);
-        
+
         if(!self._beforeHandling('PUT', self._requestPath.collectionId, self._requestCollection.findOne(self._requestPath.collectionId), obj)) {
           return self._rejectedResponse("Could not put that object.");
         }
@@ -250,7 +250,7 @@ CollectionAPI._requestListener.prototype._deleteRequest = function() {
   }
 
   self._server._fiber(function() {
-    try {      
+    try {
       if(!self._beforeHandling('DELETE', self._requestPath.collectionId, self._requestCollection.findOne(self._requestPath.collectionId))) {
         return self._rejectedResponse("Could not delete that object.");
       }
@@ -274,7 +274,7 @@ CollectionAPI._requestListener.prototype._postRequest = function() {
     self._server._fiber(function() {
       try {
         var obj = JSON.parse(requestData);
-        
+
         if(!self._beforeHandling('POST', obj)) {
           return self._rejectedResponse("Could not post that object.");
         }
