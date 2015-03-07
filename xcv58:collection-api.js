@@ -91,10 +91,15 @@ CollectionAPI._requestListener = function (server, request, response) {
   self._requestAuthToken = self._request.headers['x-auth-token'] ? self._request.headers['x-auth-token'] : self._server._querystring.parse(self._requestUrl.query)['auth-token'];
 
   var requestPath;
+  var pathName = self._requestUrl.pathname;
+  if (pathName.charAt(pathName.length - 1) === '/') {
+    pathName = pathName.substring(0, pathName.length - 1);
+  }
+
   if (self._server.options.standAlone === true && ! self._server.options.apiPath) {
-    requestPath = self._requestUrl.pathname.split('/').slice(1,3);
+    requestPath = pathName.split('/').slice(1);
   } else {
-    requestPath = self._requestUrl.pathname.split('/').slice(2,4);
+    requestPath = pathName.split('/').slice(2);
   }
 
   self._requestPath = {
