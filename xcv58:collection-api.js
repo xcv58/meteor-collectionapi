@@ -139,16 +139,16 @@ CollectionAPI._requestListener.prototype._handleRequest = function() {
   }
 
   switch (self._request.method) {
-    case 'GET':
-      return self._getRequest();
-    case 'POST':
-      return self._postRequest();
-    case 'PUT':
-      return self._putRequest();
-    case 'DELETE':
-      return self._deleteRequest();
-    default:
-      return self._notSupportedResponse();
+  case 'GET':
+    return self._getRequest();
+  case 'POST':
+    return self._postRequest();
+  case 'PUT':
+    return self._putRequest();
+  case 'DELETE':
+    return self._deleteRequest();
+  default:
+    return self._notSupportedResponse();
   }
 };
 
