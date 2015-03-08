@@ -196,7 +196,7 @@ CollectionAPI._requestListener.prototype._getRequest = function(fromRequest) {
         records.push(record);
       });
 
-      if(!self._beforeHandling('GET',  self._requestPath.collectionId, records, self._requestPath.fields, self._requestPath.query)) {
+      if(!self._beforeHandling('GET', records, self._requestPath)) {
         if (fromRequest) {
           return records.length ? self._noContentResponse() : self._notFoundResponse('No Record(s) Found');
         }
@@ -239,12 +239,7 @@ CollectionAPI._requestListener.prototype._putRequest = function() {
       try {
         var obj = JSON.parse(requestData);
 
-        if(!self._beforeHandling('PUT',
-                                 self._requestPath.collectionId,
-                                 self._requestCollection.findOne(self._requestPath.collectionId),
-                                 obj,
-                                 self._requestPath.fields,
-                                 self._requestPath.query)) {
+        if(!self._beforeHandling('PUT', self._requestCollection.findOne(self._requestPath.collectionId), obj, self._requestPath)) {
           return self._rejectedResponse("Could not put that object.");
         }
         self._requestCollection.update(self._requestPath.collectionId, obj);
@@ -269,7 +264,7 @@ CollectionAPI._requestListener.prototype._deleteRequest = function() {
 
   self._server._fiber(function() {
     try {
-      if(!self._beforeHandling('DELETE', self._requestPath.collectionId, self._requestCollection.findOne(self._requestPath.collectionId))) {
+      if(!self._beforeHandling('DELETE', self._requestCollection.findOne(self._requestPath.collectionId), self._requestPath)) {
         return self._rejectedResponse("Could not delete that object.");
       }
       self._requestCollection.remove(self._requestPath.collectionId);
@@ -293,11 +288,7 @@ CollectionAPI._requestListener.prototype._postRequest = function() {
       try {
         var obj = JSON.parse(requestData);
 
-        if(!self._beforeHandling('POST',
-                                 obj,
-                                 self._requestPath.collectionId,
-                                 self._requestPath.fields,
-                                 self._requestPath.query)) {
+        if(!self._beforeHandling('POST', obj, self._requestPath)) {
           return self._rejectedResponse("Could not post that object.");
         }
         self._requestPath.collectionId = self._requestCollection.insert(obj);

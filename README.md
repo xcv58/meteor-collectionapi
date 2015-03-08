@@ -46,10 +46,10 @@ if (Meteor.isServer) {
       authToken: undefined,                   // Require this string to be passed in on each request
       methods: ['POST','GET','PUT','DELETE'],  // Allow creating, reading, updating, and deleting
       before: {  // This methods, if defined, will be called before the POST/GET/PUT/DELETE actions are performed on the collection. If the function returns false the action will be canceled, if you return true the action will take place.
-        POST: undefined, // function(obj) {return true/false;},
-        GET: undefined, // function(collectionID, objs, fields, query) {return true/false;},
-        PUT: undefined, //function(collectionID, obj, newValues, fields, query) {return true/false;},
-        DELETE: undefined,  //function(collectionID, obj) {return true/false;}
+        POST: undefined,    // function(obj, requestMetadata) {return true/false;},
+        GET: undefined,     // function(objs, requestMetadata) {return true/false;},
+        PUT: undefined,     //function(obj, newValues, requestMetadata) {return true/false;},
+        DELETE: undefined,  //function(obj, requestMetadata) {return true/false;}
       }
     });
 
@@ -57,6 +57,26 @@ if (Meteor.isServer) {
     collectionApi.start();
   });
 }
+```
+
+Note that requestMetadata is a JSONObject that contains
+```collectionPath```, ```collectionId```, ```fields```, and ```query``` from request.
+Some values may be ```undefined``` if request doesn't have such parts.
+
+```bash
+curl http://localhost:3000/collectionapi/players/id/field/subfield?query1=1&query2=2 -d '{"a" : 1}'
+```
+
+```json
+ requestMetadata = {
+    collectionPath: 'players,
+    collectionId: 'id',
+    fields: [ 'field', 'subfield' ],
+    query: {
+      query1: '1',
+      query2: '2'
+    }
+  }
 ```
 
 Using the API
