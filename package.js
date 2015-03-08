@@ -1,7 +1,7 @@
 Package.describe({
-  name: 'xcv59:collection-api',
+  name: 'xcv58:collection-api',
   description: 'Perform CRUD operations on Collections over a RESTful API',
-  version: '0.1.17',
+  version: '0.1.18',
   summary: 'CRUD operations on Collections via HTTP/HTTPS API',
   git: 'https://github.com/xcv58/meteor-collectionapi.git',
   homepage: 'https://github.com/xcv58/meteor-collectionapi',

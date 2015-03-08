@@ -6,8 +6,10 @@ Collection API
 Easily perform [CRUD](http://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations on Meteor Collections over HTTP/HTTPS from outside of the Meteor client or server environment.
 
 
-Current version: 0.1.17  ***(Requires Meteor v1.0.3.2+)***
+Current version: 0.1.18  ***(Requires Meteor v1.0.3.2+)***
 
+***Warning: versions 0.1.18+ are not compatible with versions less than 0.1.18 if you use before functions!***
+Because we change the before functions call parameters.
 
 Installation
 -------
