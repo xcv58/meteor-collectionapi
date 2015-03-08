@@ -182,7 +182,7 @@ CollectionAPI._requestListener.prototype._beforeHandling = function (method) {
   return true;
 }
 
-CollectionAPI._requestListener.prototype._getRequest = function(fromPutRequest) {
+CollectionAPI._requestListener.prototype._getRequest = function(fromRequest) {
   var self = this;
 
   self._server._fiber(function() {
@@ -197,7 +197,7 @@ CollectionAPI._requestListener.prototype._getRequest = function(fromPutRequest) 
       });
 
       if(!self._beforeHandling('GET',  self._requestPath.collectionId, records, self._requestPath.fields, self._requestPath.query)) {
-        if (fromPutRequest) {
+        if (fromRequest) {
           return records.length ? self._noContentResponse() : self._notFoundResponse('No Record(s) Found');
         }
         return self._rejectedResponse("Could not get that collection/object.");
@@ -207,6 +207,10 @@ CollectionAPI._requestListener.prototype._getRequest = function(fromPutRequest) 
 
       if (records.length === 0) {
         return self._notFoundResponse('No Record(s) Found');
+      }
+
+      if (fromRequest === "POST") {
+        return self._createdResponse(JSON.stringify(records));
       }
 
       return self._okResponse(JSON.stringify(records));
@@ -250,7 +254,7 @@ CollectionAPI._requestListener.prototype._putRequest = function() {
       if (self._requestPath.query.callback === "0") {
         return self._createdResponse(JSON.stringify({'status': 'success'}));
       } else {
-        return self._getRequest('fromPutRequest');
+        return self._getRequest('PUT');
       }
     }).run();
   });
@@ -296,7 +300,7 @@ CollectionAPI._requestListener.prototype._postRequest = function() {
       } catch (e) {
         return self._internalServerErrorResponse(e);
       }
-      return self._createdResponse(JSON.stringify({_id: self._requestPath.collectionId}));
+      return self._getRequest('POST');
     }).run();
   });
 };
