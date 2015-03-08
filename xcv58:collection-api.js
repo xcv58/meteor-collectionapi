@@ -85,7 +85,7 @@ CollectionAPI._requestListener = function (server, request, response) {
   self._request = request;
   self._response = response;
 
-  self._requestUrl = self._server._url.parse(self._request.url);
+  self._requestUrl = self._server._url.parse(self._request.url, true);
 
   // Check for the X-Auth-Token header or auth-token in the query string
   self._requestAuthToken = self._request.headers['x-auth-token'] ? self._request.headers['x-auth-token'] : self._server._querystring.parse(self._requestUrl.query)['auth-token'];
@@ -105,7 +105,7 @@ CollectionAPI._requestListener = function (server, request, response) {
   self._requestPath = {
     collectionPath: requestPath[0],
     collectionId: requestPath[1],
-    parameters: requestPath.slice(2),
+    fields: requestPath.slice(2),
     query: self._requestUrl.query
   };
 
@@ -196,7 +196,7 @@ CollectionAPI._requestListener.prototype._getRequest = function(fromPutRequest) 
         records.push(record);
       });
 
-      if(!self._beforeHandling('GET',  self._requestPath.collectionId, records, self._requestPath.parameters, self._requestPath.query)) {
+      if(!self._beforeHandling('GET',  self._requestPath.collectionId, records, self._requestPath.fields, self._requestPath.query)) {
         if (fromPutRequest) {
           return records.length ? self._noContentResponse() : self._notFoundResponse('No Record(s) Found');
         }
@@ -214,9 +214,7 @@ CollectionAPI._requestListener.prototype._getRequest = function(fromPutRequest) 
     } catch (e) {
       return self._internalServerErrorResponse(e);
     }
-
   }).run();
-
 };
 
 CollectionAPI._requestListener.prototype._putRequest = function() {
@@ -237,17 +235,25 @@ CollectionAPI._requestListener.prototype._putRequest = function() {
       try {
         var obj = JSON.parse(requestData);
 
-        if(!self._beforeHandling('PUT', self._requestPath.collectionId, self._requestCollection.findOne(self._requestPath.collectionId), obj)) {
+        if(!self._beforeHandling('PUT',
+                                 self._requestPath.collectionId,
+                                 self._requestCollection.findOne(self._requestPath.collectionId),
+                                 obj,
+                                 self._requestPath.fields,
+                                 self._requestPath.query)) {
           return self._rejectedResponse("Could not put that object.");
         }
         self._requestCollection.update(self._requestPath.collectionId, obj);
       } catch (e) {
         return self._internalServerErrorResponse(e);
       }
-      return self._getRequest('fromPutRequest');
+      if (self._requestPath.query.callback === "0") {
+        return self._createdResponse(JSON.stringify({'status': 'success'}));
+      } else {
+        return self._getRequest('fromPutRequest');
+      }
     }).run();
   });
-
 };
 
 CollectionAPI._requestListener.prototype._deleteRequest = function() {
