@@ -6,15 +6,15 @@ Collection API
 Easily perform [CRUD](http://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations on Meteor Collections over HTTP/HTTPS from outside of the Meteor client or server environment.
 
 
-Current version: 0.1.15  ***(Requires Meteor v0.6.5+)***
+Current version: 0.1.16  ***(Requires Meteor v1.0.3.2+)***
 
 
 Installation
 -------
 
-### With [Metorite](https://github.com/oortcloud/meteorite)
+### Just run this in your app:
 
-    $ mrt add collection-api
+    $ meteor add xcv58:collection-api
 
 It's that easy! Be sure to check out other cool packages over at [Atmosphere](https://atmosphere.meteor.com/).
 
@@ -46,9 +46,9 @@ if (Meteor.isServer) {
       authToken: undefined,                   // Require this string to be passed in on each request
       methods: ['POST','GET','PUT','DELETE'],  // Allow creating, reading, updating, and deleting
       before: {  // This methods, if defined, will be called before the POST/GET/PUT/DELETE actions are performed on the collection. If the function returns false the action will be canceled, if you return true the action will take place.
-        POST: undefined,  // function(obj) {return true/false;},
-        GET: undefined,  // function(collectionID, objs) {return true/false;},
-        PUT: undefined,  //function(collectionID, obj, newValues) {return true/false;},
+        POST: undefined, // function(obj) {return true/false;},
+        GET: undefined, // function(collectionID, objs, fields, query) {return true/false;},
+        PUT: undefined, //function(collectionID, obj, newValues, fields, query) {return true/false;},
         DELETE: undefined,  //function(collectionID, obj) {return true/false;}
       }
     });
@@ -94,6 +94,10 @@ Create a record:
 Update a record:
 
     $ curl -H "X-Auth-Token: 97f0ad9e24ca5e0408a269748d7fe0a0" -X PUT -d "{\"\$set\":{\"gender\":\"male\"}}" http://localhost:3000/collectionapi/players/c4acddd1-a504-4212-9534-adca17af4885
+
+With this parameter: ```?callback=0``` it will return a JSONObject like ```{status: success}``` instead of updated record:
+
+    $ curl -H "X-Auth-Token: 97f0ad9e24ca5e0408a269748d7fe0a0" -X PUT -d "{\"\$set\":{\"gender\":\"male\"}}" http://localhost:3000/collectionapi/players/c4acddd1-a504-4212-9534-adca17af4885?callback=0
 
 Delete a record:
 
