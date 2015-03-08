@@ -104,7 +104,9 @@ CollectionAPI._requestListener = function (server, request, response) {
 
   self._requestPath = {
     collectionPath: requestPath[0],
-    collectionId: requestPath[1]
+    collectionId: requestPath[1],
+    parameters: requestPath.slice(2),
+    query: self._requestUrl.query
   };
 
   self._requestCollection = self._server._collections[self._requestPath.collectionPath] ? self._server._collections[self._requestPath.collectionPath].collection : undefined;
@@ -194,7 +196,7 @@ CollectionAPI._requestListener.prototype._getRequest = function(fromPutRequest) 
         records.push(record);
       });
 
-      if(!self._beforeHandling('GET',  self._requestPath.collectionId, records)) {
+      if(!self._beforeHandling('GET',  self._requestPath.collectionId, records, self._requestPath.parameters, self._requestPath.query)) {
         if (fromPutRequest) {
           return records.length ? self._noContentResponse() : self._notFoundResponse('No Record(s) Found');
         }
