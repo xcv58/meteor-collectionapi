@@ -1,5 +1,5 @@
 Package.describe({
-  name: 'xcv58:collection-api',
+  name: 'xcv59:collection-api',
   description: 'Perform CRUD operations on Collections over a RESTful API',
   version: '0.1.17',
   summary: 'CRUD operations on Collections via HTTP/HTTPS API',
