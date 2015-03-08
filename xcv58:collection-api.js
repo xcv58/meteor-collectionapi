@@ -293,7 +293,11 @@ CollectionAPI._requestListener.prototype._postRequest = function() {
       try {
         var obj = JSON.parse(requestData);
 
-        if(!self._beforeHandling('POST', obj)) {
+        if(!self._beforeHandling('POST',
+                                 obj,
+                                 self._requestPath.collectionId,
+                                 self._requestPath.fields,
+                                 self._requestPath.query)) {
           return self._rejectedResponse("Could not post that object.");
         }
         self._requestPath.collectionId = self._requestCollection.insert(obj);
