@@ -69,7 +69,7 @@ Some values may be ```undefined``` if request doesn't have such parts.
 curl http://localhost:3000/collectionapi/players/id/field/subfield?query1=1&query2=2 -d '{"a" : 1}'
 ```
 
-```json
+```javascript
  requestMetadata = {
     collectionPath: 'players,
     collectionId: 'id',
