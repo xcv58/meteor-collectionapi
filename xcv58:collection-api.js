@@ -288,9 +288,20 @@ CollectionAPI._requestListener.prototype._postRequest = function() {
       try {
         var obj = JSON.parse(requestData);
 
-        if(!self._beforeHandling('POST', obj, self._requestPath)) {
+        var returnObject = {
+          success: false,
+          statusCode : undefined,
+          body: undefined
+        };
+
+        if(!self._beforeHandling('POST', obj, self._requestPath, returnObject)) {
           return self._rejectedResponse("Could not post that object.");
         }
+
+        if (returnObject.success && returnObject.statusCode && returnObject.body) {
+          return self._sendResponse(returnObject.statusCode, JSON.stringify(returnObject.body));
+        }
+
         self._requestPath.collectionId = self._requestCollection.insert(obj);
       } catch (e) {
         return self._internalServerErrorResponse(e);
