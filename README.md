@@ -1,4 +1,4 @@
-This package is forked from crazytoad/meteor-collectionapi
+This package is forked from [crazytoad/meteor-collectionapi](https://github.com/crazytoad/meteor-collectionapi)
 
 Table of Contents
 =================
