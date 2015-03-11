@@ -64,7 +64,7 @@ CollectionAPI.prototype.start = function() {
         next();
         return;
       }
-      self._fiber(function () {
+      self._fiber(function() {
         new CollectionAPI._requestListener(self, req, res);
       }).run();
     });
@@ -78,7 +78,7 @@ CollectionAPI.prototype._collectionOptions = function(requestPath) {
   return self._collections[requestPath.collectionPath] ? self._collections[requestPath.collectionPath].options : undefined;
 };
 
-CollectionAPI._requestListener = function (server, request, response) {
+CollectionAPI._requestListener = function(server, request, response) {
   var self = this;
 
   self._server = server;
@@ -160,7 +160,7 @@ CollectionAPI._requestListener.prototype._handleRequest = function() {
   }
 };
 
-CollectionAPI._requestListener.prototype._requestMethodAllowed = function (method) {
+CollectionAPI._requestListener.prototype._requestMethodAllowed = function(method) {
   var self = this;
   var collectionOptions = self._server._collectionOptions(self._requestPath);
 
@@ -171,7 +171,7 @@ CollectionAPI._requestListener.prototype._requestMethodAllowed = function (metho
   return true;
 };
 
-CollectionAPI._requestListener.prototype._beforeHandling = function (method) {
+CollectionAPI._requestListener.prototype._beforeHandling = function(method) {
   var self = this;
   var collectionOptions = self._server._collectionOptions(self._requestPath);
 
@@ -182,7 +182,7 @@ CollectionAPI._requestListener.prototype._beforeHandling = function (method) {
   return true;
 };
 
-CollectionAPI._requestListener.prototype._afterHandling = function (method) {
+CollectionAPI._requestListener.prototype._afterHandling = function(method) {
   var self = this;
   var collectionOptions = self._server._collectionOptions(self._requestPath);
 
