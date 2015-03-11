@@ -3,6 +3,7 @@ This package is forked from crazytoad/meteor-collectionapi
 Table of Contents
 =================
 
+  * [Table of Contents](#table-of-contents)
   * [Collection API](#collection-api)
     * [Installation](#installation)
       * [Just run this in your app:](#just-run-this-in-your-app)
@@ -10,7 +11,7 @@ Table of Contents
     * [Using the API](#using-the-api)
       * [API Usage Example](#api-usage-example)
       * [Advanced API](#advanced-api)
-       * [POST](#post)
+        * [POST](#post)
 
 Collection API
 ========

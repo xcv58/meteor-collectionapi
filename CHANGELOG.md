@@ -1,3 +1,12 @@
+## v0.1.20 (Requires Meteor v1.0.3.2+)
+#### released on 2015-03-10
+
+* Expose parameters and query of request to developer, so we can support arbitrary length of request url
+* Support ?callback=0 to decide what should PUT return
+* Change the api for before functions to make it clear and flexible
+* Expose after functions for developer to let them update status after mongodb operations
+* Add mechanism (pass one more object to developer for return status code and content) to let developer directly handle POST request
+
 ## v0.1.15 (Requires Meteor v0.6.5+)
 #### released on 2013-08-17
 
