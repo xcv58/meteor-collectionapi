@@ -1,7 +1,7 @@
 CollectionAPI = function(options) {
   var self = this;
 
-  self.version = '0.1.19';
+  self.version = '0.1.20';
   self._url = Npm.require('url');
   self._querystring = Npm.require('querystring');
   self._fiber = Npm.require('fibers');
@@ -180,7 +180,18 @@ CollectionAPI._requestListener.prototype._beforeHandling = function (method) {
   }
 
   return true;
-}
+};
+
+CollectionAPI._requestListener.prototype._afterHandling = function (method) {
+  var self = this;
+  var collectionOptions = self._server._collectionOptions(self._requestPath);
+
+  if (collectionOptions && collectionOptions.after && collectionOptions.after[method] &&  _.isFunction(collectionOptions.after[method])) {
+    return collectionOptions.after[method].apply(self, _.rest(arguments));
+  }
+
+  return true;
+};
 
 CollectionAPI._requestListener.prototype._getRequest = function(fromRequest) {
   var self = this;
@@ -208,6 +219,9 @@ CollectionAPI._requestListener.prototype._getRequest = function(fromRequest) {
       if (records.length === 0) {
         return self._notFoundResponse('No Record(s) Found');
       }
+
+
+      self._afterHandling('GET');
 
       if (fromRequest === "POST") {
         return self._createdResponse(JSON.stringify(records));
@@ -246,6 +260,8 @@ CollectionAPI._requestListener.prototype._putRequest = function() {
       } catch (e) {
         return self._internalServerErrorResponse(e);
       }
+
+      self._afterHandling('PUT');
       if (self._requestPath.query.callback === "0") {
         return self._createdResponse(JSON.stringify({'status': 'success'}));
       } else {
@@ -271,6 +287,7 @@ CollectionAPI._requestListener.prototype._deleteRequest = function() {
     } catch (e) {
       return self._internalServerErrorResponse(e);
     }
+    self._afterHandling('DELETE');
     return self._okResponse('');
   }).run();
 };
@@ -299,6 +316,7 @@ CollectionAPI._requestListener.prototype._postRequest = function() {
         }
 
         if (returnObject.success && returnObject.statusCode && returnObject.body) {
+          self._afterHandling('POST');
           return self._sendResponse(returnObject.statusCode, JSON.stringify(returnObject.body));
         }
 
@@ -306,6 +324,7 @@ CollectionAPI._requestListener.prototype._postRequest = function() {
       } catch (e) {
         return self._internalServerErrorResponse(e);
       }
+      self._afterHandling('POST');
       return self._getRequest('POST');
     }).run();
   });
