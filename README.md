@@ -2,6 +2,7 @@ This package is forked from [crazytoad/meteor-collectionapi](https://github.com/
 
 Table of Contents
 =================
+***Warning:*** the table of contents wouldn't in ***Atmosphere***!
 
   * [Table of Contents](#table-of-contents)
   * [Collection API](#collection-api)
