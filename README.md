@@ -4,16 +4,14 @@ Table of Contents
 =================
 ***Warning:*** the table of contents wouldn't in ***Atmosphere***!
 
-  * [Table of Contents](#table-of-contents)
   * [Collection API](#collection-api)
-    * [Installation](#installation)
-      * [Just run this in your app:](#just-run-this-in-your-app)
-    * [Quick Usage](#quick-usage)
-    * [Using the API](#using-the-api)
-      * [API Usage Example](#api-usage-example)
-      * [Advanced API](#advanced-api)
-        * [POST](#post)
-        * [Authenticate Function](#authenticate-function)
+  * [Installation](#installation)
+  * [Quick Setup](#quick-setup)
+  * [Using the API](#using-the-api)
+    * [API Usage Example](#api-usage-example)
+  * [Advanced Features](#advanced-features)
+    * [Handle POST by yourself](handle-post-by-yourself)
+    * [Custom Authenticate Function](#custom-authenticate-function)
 
 Collection API
 ========
@@ -29,14 +27,14 @@ Because we change the before functions call parameters.
 Installation
 -------
 
-### Just run this in your app:
+Just run this in your app:
 
     $ meteor add xcv58:collection-api
 
 It's that easy! Be sure to check out other cool packages over at [Atmosphere](https://atmosphere.meteor.com/).
 
 
-Quick Usage
+Quick Setup
 -------
 
 ```javascript
@@ -114,6 +112,8 @@ If you specify an `authToken` it must be passed in either the `X-Auth-Token` req
 
 ### API Usage Example
 
+If you already did [Quick Setup](#quick-setup) part, please ignore the setup code snippet below:
+
 ```javascript
 Players = new Meteor.Collection("players");
 
@@ -150,9 +150,10 @@ Delete a record:
 
     $ curl -H "X-Auth-Token: 97f0ad9e24ca5e0408a269748d7fe0a0" -X DELETE http://localhost:3000/collectionapi/players/c4acddd1-a504-4212-9534-adca17af4885
 
-### Advanced API
+Advanced Features
+-------
 
-#### POST
+### Handle POST by yourself
 The use case is only for that you want to handle POST request by yourself and **don't allow all other requests**.
 
 For example, you want to split one API path requests to different Collections, the package can't do this.
@@ -201,7 +202,7 @@ if (Meteor.isServer) {
 }
 ```
 
-#### Authenticate Function
+### Custom Authenticate Function
 Despite static authToken, you may need more flexible authenicate approach
 that you can fully control.
 So it comes!
