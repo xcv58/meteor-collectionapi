@@ -1,7 +1,7 @@
 CollectionAPI = function(options) {
   var self = this;
 
-  self.version = '0.1.20';
+  self.version = '0.2.0';
   self._url = Npm.require('url');
   self._querystring = Npm.require('querystring');
   self._fiber = Npm.require('fibers');
@@ -111,7 +111,7 @@ CollectionAPI._requestListener = function(server, request, response) {
 
   self._requestCollection = self._server._collections[self._requestPath.collectionPath] ? self._server._collections[self._requestPath.collectionPath].collection : undefined;
 
-  if (!self._authenticate()) {
+  if (!self._authenticate(self._requestAuthToken, self._request.method, self._requestPath)) {
     return self._unauthorizedResponse('Invalid/Missing Auth Token');
   }
 
@@ -125,18 +125,32 @@ CollectionAPI._requestListener = function(server, request, response) {
 CollectionAPI._requestListener.prototype._authenticate = function() {
   var self = this;
   var collectionOptions = self._server._collectionOptions(self._requestPath);
-
-  // Check the collection's auth token
-  if (collectionOptions && collectionOptions.authToken) {
-    return self._requestAuthToken === collectionOptions.authToken;
-  }
+  var authCount = 0;
 
   // Check the global auth token
   if (self._server.options.authToken) {
-    return self._requestAuthToken === self._server.options.authToken;
+    authCount++;
+    if (self._requestAuthToken === self._server.options.authToken) {
+      return true;
+    }
   }
 
-  return true;
+  // Check the collection's auth token
+  if (collectionOptions && collectionOptions.authToken) {
+    authCount++;
+    if(self._requestAuthToken === collectionOptions.authToken) {
+      return true;
+    }
+  }
+
+  if (!authCount && collectionOptions.authenticate && _.isFunction(collectionOptions.authenticate)) {
+    authCount++;
+    if (collectionOptions.authenticate.apply(self, arguments)) {
+      return true;
+    }
+  }
+
+  return authCount === 0;
 };
 
 CollectionAPI._requestListener.prototype._handleRequest = function() {

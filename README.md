@@ -12,6 +12,7 @@ Table of Contents
       * [API Usage Example](#api-usage-example)
       * [Advanced API](#advanced-api)
         * [POST](#post)
+        * [Authenticate Function](#authenticate-function)
 
 Collection API
 ========
@@ -58,7 +59,8 @@ if (Meteor.isServer) {
     // Add the collection Players to the API "/players" path
     collectionApi.addCollection(Players, 'players', {
       // All values listed below are default
-      authToken: undefined,                   // Require this string to be passed in on each request
+      authToken: undefined,                   // Require this string to be passed in on each request.
+      authenticate: undefined, // function(token, method, requestMetadata) {return true/false}; More details can found in [Authenticate Function](#Authenticate-Function).
       methods: ['POST','GET','PUT','DELETE'],  // Allow creating, reading, updating, and deleting
       before: {  // This methods, if defined, will be called before the POST/GET/PUT/DELETE actions are performed on the collection.
                  // If the function returns false the action will be canceled, if you return true the action will take place.
@@ -197,3 +199,56 @@ if (Meteor.isServer) {
   });
 }
 ```
+
+#### Authenticate Function
+Despite static authToken, you may need more flexible authenicate approach
+that you can fully control.
+So it comes!
+
+You need implement the ```authenticate``` function in ```collectionApi.addCollection```:
+
+```javascript
+      authenticate: function(token, method, requestMetadata) {
+        console.log("authen");
+        console.log("token: " + token);
+        console.log("method: " + method);
+        console.log("requestMetadata: " + JSON.stringify(requestMetadata));
+        if (token === undefined) {
+          return false;
+        }
+        if (token === "97f0ad9e24ca5e0408a269748d7fe0a0") {
+          return false;
+        }
+        return true;
+      },
+```
+
+So the package can give all you need for authentication for every request.
+
+You can authenticate by yourself,
+such as allow all ```POST``` and ```GET``` requests even without a ```authToken```,
+allow only ```PUT``` and ```DELETE``` requtests with valid ```authToken```.
+
+Other use case may be combining the authentication with your existed user system,
+so that you can assign unique permission for different users.
+
+The arguments ```token```, ```method```, and ```requestMetadata``` represent
+authen token client provide, request method, and JSONObject contains url metadata respectively.
+
+For example, a request:
+
+    $ curl  -H "X-Auth-Token: 97f0ad9e24ca5e0408a269748d7fe0a0" http://localhost:3000/collectionapi/players/id/a/b/c\?x\=1\&y\=2\&c\=3
+
+should have output like:
+
+```bash
+I20150312-11:50:33.222(-4)? token: 97f0ad9e24ca5e0408a269748d7fe0a0
+I20150312-11:50:33.222(-4)? method: GET
+I20150312-11:50:33.222(-4)? requestMetadata: {"collectionPath":"players","collectionId":"id","fields":["a","b","c"],"query":{"x":"1","y":"2","c":"3"}}
+```
+
+**Note** that the ```authenticate function``` is optional, and the **```authToken```** you defined in
+```new CollectionAPI``` or ```collectionApi.addCollection``` still work and have higher priority.
+
+So the authentication is hierarchical system.
+If you don't need global/static ```authToken```, just ignore them or set it to ```undefined```.

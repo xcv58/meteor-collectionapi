@@ -1,3 +1,8 @@
+## v0.2.0 (Requires Meteor v1.0.3.2+)
+#### released on 2015-03-12
+
+* Support authenticate function, which defined by developer
+
 ## v0.1.20 (Requires Meteor v1.0.3.2+)
 #### released on 2015-03-10
 
