@@ -1,0 +1,12 @@
+# https://github.com/xcv58/meteor-collectionapi
+
+language: node_js
+
+node_js:
+  - "0.12"
+
+before_install:
+  - "curl -L http://git.io/ejPSng | /bin/sh"
+
+script:
+ - meteor build temp
