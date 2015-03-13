@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/xcv58/meteor-collectionapi.svg)](https://travis-ci.org/xcv58/meteor-collectionapi)
+
 This package is forked from [crazytoad/meteor-collectionapi](https://github.com/crazytoad/meteor-collectionapi)
 
 Table of Contents
