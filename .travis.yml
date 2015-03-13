@@ -6,4 +6,10 @@ node_js:
   - "0.12"
 
 before_install:
-  - "curl -L http://git.io/ejPSng | /bin/sh"
+  - "curl https://install.meteor.com | /bin/sh"
+  - "npm install -g spacejam"
+
+
+script:
+  - "spacejam test-packages ./"
+  - "node xcv58:collection-api.js"
