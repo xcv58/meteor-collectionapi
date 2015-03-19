@@ -68,7 +68,7 @@ if (Meteor.isServer) {
         POST: undefined,    // function(obj, requestMetadata, returnObject) {return true/false;},
         GET: undefined,     // function(objs, requestMetadata, returnObject) {return true/false;},
         PUT: undefined,     // function(obj, newValues, requestMetadata, returnObject) {return true/false;},
-        DELETE: undefined,  // function(obj, requestMetadata, returnObject) {return true/false;}
+        DELETE: undefined   // function(obj, requestMetadata, returnObject) {return true/false;}
       },
       after: {  // This methods, if defined, will be called after the POST/GET/PUT/DELETE actions are performed on the collection.
                 // Generally, you don't need this, unless you have global variable to reflect data inside collection.
@@ -76,7 +76,7 @@ if (Meteor.isServer) {
         POST: undefined,    // function() {console.log("After POST");},
         GET: undefined,     // function() {console.log("After GET");},
         PUT: undefined,     // function() {console.log("After PUT");},
-        DELETE: undefined,  // function() {console.log("After DELETE");},
+        DELETE: undefined   // function() {console.log("After DELETE");},
       }
     });
 
