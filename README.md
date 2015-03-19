@@ -174,9 +174,19 @@ If you really want to handle requests by yourself, you need always ```return tru
 and set ```returnObject.success = true;```,
 then properly set ```statusCode``` and ```body```.
 
-But you need maintain your **Collection(s) manually**, don't, never forget that!
+But you need maintain your **Collection(s) manually**, don't, never forget this!
 
-Example for handle
+There is a simple demo to for handle all requests in application level.
+
+It use ```_del``` to indicate whether a record was deleted, so you would never lose any data:
+https://github.com/xcv58/meteor-collectionapi-demo/blob/cf233f31d973191e6cd4510ed5e017ad695b33f8/server/restful.js#L36
+
+But nothing comes for free, you may face some performance issue.
+You can move deleted records to another collection, if performance does matter.
+
+---
+
+Example for handle POST:
 
 ```javascript
         POST: function(obj, requestMetadata, returnObject) {
