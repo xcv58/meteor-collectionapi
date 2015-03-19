@@ -1,7 +1,7 @@
 CollectionAPI = function(options) {
   var self = this;
 
-  self.version = '0.2.0';
+  self.version = '0.2.1';
   self._url = Npm.require('url');
   self._querystring = Npm.require('querystring');
   self._fiber = Npm.require('fibers');
@@ -207,6 +207,24 @@ CollectionAPI._requestListener.prototype._afterHandling = function(method) {
   return true;
 };
 
+CollectionAPI._requestListener.prototype._getEmptyReturnObject = function() {
+  var returnObject = {
+    success: false,
+    statusCode : undefined,
+    body: undefined
+  };
+  return returnObject;
+};
+
+CollectionAPI._requestListener.prototype._handleReturnObject = function(method, returnObject) {
+  if (returnObject.success && returnObject.statusCode && returnObject.body) {
+    var self = this;
+    self._afterHandling(method);
+    return self._sendResponse(returnObject.statusCode, JSON.stringify(returnObject.body));
+  }
+  return false;
+};
+
 CollectionAPI._requestListener.prototype._getRequest = function(fromRequest) {
   var self = this;
 
@@ -221,11 +239,17 @@ CollectionAPI._requestListener.prototype._getRequest = function(fromRequest) {
         records.push(record);
       });
 
-      if(!self._beforeHandling('GET', records, self._requestPath)) {
+      var returnObject = self._getEmptyReturnObject();
+
+      if(!self._beforeHandling('GET', records, self._requestPath, returnObject)) {
         if (fromRequest) {
           return records.length ? self._noContentResponse() : self._notFoundResponse('No Record(s) Found');
         }
         return self._rejectedResponse("Could not get that collection/object.");
+      }
+
+      if (self._handleReturnObject('GET', returnObject)) {
+        return true;
       }
 
       records = _.compact(records);
@@ -267,9 +291,16 @@ CollectionAPI._requestListener.prototype._putRequest = function() {
       try {
         var obj = JSON.parse(requestData);
 
-        if(!self._beforeHandling('PUT', self._requestCollection.findOne(self._requestPath.collectionId), obj, self._requestPath)) {
+        var returnObject = self._getEmptyReturnObject();
+
+        if(!self._beforeHandling('PUT', self._requestCollection.findOne(self._requestPath.collectionId), obj, self._requestPath, returnObject)) {
           return self._rejectedResponse("Could not put that object.");
         }
+
+        if (self._handleReturnObject('PUT', returnObject)) {
+          return true;
+        }
+
         self._requestCollection.update(self._requestPath.collectionId, obj);
       } catch (e) {
         return self._internalServerErrorResponse(e);
@@ -294,9 +325,16 @@ CollectionAPI._requestListener.prototype._deleteRequest = function() {
 
   self._server._fiber(function() {
     try {
-      if(!self._beforeHandling('DELETE', self._requestCollection.findOne(self._requestPath.collectionId), self._requestPath)) {
+      var returnObject = self._getEmptyReturnObject();
+
+      if(!self._beforeHandling('DELETE', self._requestCollection.findOne(self._requestPath.collectionId), self._requestPath, returnObject)) {
         return self._rejectedResponse("Could not delete that object.");
       }
+
+      if (self._handleReturnObject('DELETE', returnObject)) {
+        return true;
+      }
+
       self._requestCollection.remove(self._requestPath.collectionId);
     } catch (e) {
       return self._internalServerErrorResponse(e);
@@ -319,19 +357,14 @@ CollectionAPI._requestListener.prototype._postRequest = function() {
       try {
         var obj = JSON.parse(requestData);
 
-        var returnObject = {
-          success: false,
-          statusCode : undefined,
-          body: undefined
-        };
+        var returnObject = self._getEmptyReturnObject();
 
         if(!self._beforeHandling('POST', obj, self._requestPath, returnObject)) {
           return self._rejectedResponse("Could not post that object.");
         }
 
-        if (returnObject.success && returnObject.statusCode && returnObject.body) {
-          self._afterHandling('POST');
-          return self._sendResponse(returnObject.statusCode, JSON.stringify(returnObject.body));
+        if (self._handleReturnObject('POST', returnObject)) {
+          return true;
         }
 
         self._requestPath.collectionId = self._requestCollection.insert(obj);
@@ -391,4 +424,5 @@ CollectionAPI._requestListener.prototype._sendResponse = function(statusCode, bo
   self._response.setHeader('Content-Type', 'application/json');
   self._response.write(body);
   self._response.end();
+  return true;
 };

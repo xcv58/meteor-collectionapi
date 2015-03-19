@@ -12,7 +12,7 @@ Table of Contents
   * [Using the API](#using-the-api)
     * [API Usage Example](#api-usage-example)
   * [Advanced Features](#advanced-features)
-    * [Handle POST by yourself](handle-post-by-yourself)
+    * [Handle all requests by yourself](handle-all-requests-by-yourself)
     * [Custom Authenticate Function](#custom-authenticate-function)
 
 Collection API
@@ -21,7 +21,7 @@ Collection API
 Easily perform [CRUD](http://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations on Meteor Collections over HTTP/HTTPS from outside of the Meteor client or server environment.
 
 
-Current version: 0.1.20  ***(Requires Meteor v1.0.3.2+)***
+Current version: 0.1.21  ***(Requires Meteor v1.0.3.2+)***
 
 ***Warning: versions 0.1.18+ are not compatible with versions less than 0.1.18 if you use before functions!***
 Because we change the before functions call parameters.
@@ -65,10 +65,10 @@ if (Meteor.isServer) {
       methods: ['POST','GET','PUT','DELETE'],  // Allow creating, reading, updating, and deleting
       before: {  // This methods, if defined, will be called before the POST/GET/PUT/DELETE actions are performed on the collection.
                  // If the function returns false the action will be canceled, if you return true the action will take place.
-        POST: undefined,    // function(obj, requestMetadata) {return true/false;},
-        GET: undefined,     // function(objs, requestMetadata) {return true/false;},
-        PUT: undefined,     // function(obj, newValues, requestMetadata) {return true/false;},
-        DELETE: undefined,  // function(obj, requestMetadata) {return true/false;}
+        POST: undefined,    // function(obj, requestMetadata, returnObject) {return true/false;},
+        GET: undefined,     // function(objs, requestMetadata, returnObject) {return true/false;},
+        PUT: undefined,     // function(obj, newValues, requestMetadata, returnObject) {return true/false;},
+        DELETE: undefined,  // function(obj, requestMetadata, returnObject) {return true/false;}
       },
       after: {  // This methods, if defined, will be called after the POST/GET/PUT/DELETE actions are performed on the collection.
                 // Generally, you don't need this, unless you have global variable to reflect data inside collection.
@@ -155,8 +155,52 @@ Delete a record:
 Advanced Features
 -------
 
-### Handle POST by yourself
-The use case is only for that you want to handle POST request by yourself and **don't allow all other requests**.
+### Handle all requests by yourself
+~~The use case is only for that you want to handle POST request by yourself and **don't allow all other requests**.~~
+
+**The ```v0.2.1+``` expose an JSONObject ```returnObject```, which can take some information back to package, then return to user.**
+
+The ```returnObject``` look like this:
+
+```javascript
+  var returnObject = {
+    success: false,
+    statusCode : undefined,
+    body: undefined
+  };
+```
+
+If you really want to handle requests by yourself, you need always ```return true```,
+and set ```returnObject.success = true;```,
+then properly set ```statusCode``` and ```body```.
+
+But you need maintain your **Collection(s) manually**, don't, never forget that!
+
+Example for handle
+
+```javascript
+        POST: function(obj, requestMetadata, returnObject) {
+          var hasId = obj.hasOwnProperty('id');
+          if (hasId) {
+            // insert obj to your collection!
+            returnObject.success = true;
+            returnObject.statusCode = 201;
+            returnObject.body = {
+              method: 'POST',
+              obj: obj
+            };
+          } else {
+            returnObject.success = true;
+            returnObject.statusCode = 500;
+            returnObject.body = {error: 'no id'};
+          }
+          return true;
+        }
+```
+
+---
+
+Below is for ```v0.2.0``` to handle ```POST``` request:
 
 For example, you want to split one API path requests to different Collections, the package can't do this.
 But you can solve it in application level.

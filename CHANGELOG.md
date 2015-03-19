@@ -1,3 +1,7 @@
+## v0.2.1 (Requires Meteor v1.0.3.2+)
+#### released on 2015-03-19
+* Developer now can directly handle all (not only POST) requests
+
 ## v0.2.0 (Requires Meteor v1.0.3.2+)
 #### released on 2015-03-12
 
