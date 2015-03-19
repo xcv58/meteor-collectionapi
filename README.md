@@ -12,7 +12,7 @@ Table of Contents
   * [Using the API](#using-the-api)
     * [API Usage Example](#api-usage-example)
   * [Advanced Features](#advanced-features)
-    * [Handle all requests by yourself](handle-all-requests-by-yourself)
+    * [Handle all requests by yourself](#handle-all-requests-by-yourself)
     * [Custom Authenticate Function](#custom-authenticate-function)
 
 Collection API
@@ -178,7 +178,7 @@ But you need maintain your **Collection(s) manually**, don't, never forget this!
 
 There is a simple demo to for handle all requests in application level.
 
-It use ```_del``` to indicate whether a record was deleted, so you would never lose any data:
+It uses ```_del``` to indicate whether a record was deleted, so you would never lose any data:
 https://github.com/xcv58/meteor-collectionapi-demo/blob/cf233f31d973191e6cd4510ed5e017ad695b33f8/server/restful.js#L36
 
 But nothing comes for free, you may face some performance issue.
