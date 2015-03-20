@@ -1,7 +1,7 @@
 CollectionAPI = function(options) {
   var self = this;
 
-  self.version = '0.2.1';
+  self.version = '0.2.2';
   self._url = Npm.require('url');
   self._querystring = Npm.require('querystring');
   self._fiber = Npm.require('fibers');
@@ -111,12 +111,12 @@ CollectionAPI._requestListener = function(server, request, response) {
 
   self._requestCollection = self._server._collections[self._requestPath.collectionPath] ? self._server._collections[self._requestPath.collectionPath].collection : undefined;
 
-  if (!self._authenticate(self._requestAuthToken, self._request.method, self._requestPath)) {
-    return self._unauthorizedResponse('Invalid/Missing Auth Token');
-  }
-
   if (!self._requestCollection) {
     return self._notFoundResponse('Collection Object Not Found');
+  }
+
+  if (!self._authenticate(self._requestAuthToken, self._request.method, self._requestPath)) {
+    return self._unauthorizedResponse('Invalid/Missing Auth Token');
   }
 
   return self._handleRequest();
