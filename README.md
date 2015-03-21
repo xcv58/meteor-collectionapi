@@ -50,6 +50,7 @@ if (Meteor.isServer) {
       authToken: undefined,              // Require this string to be passed in on each request
       apiPath: 'collectionapi',          // API path prefix
       standAlone: false,                 // Run as a stand-alone HTTP(S) server
+      allowCORS: false,                  // Allow CORS (Cross-Origin Resource Sharing)
       sslEnabled: false,                 // Disable/Enable SSL (stand-alone only)
       listenPort: 3005,                  // Port to listen to (stand-alone only)
       listenHost: undefined,             // Host to bind to (stand-alone only)
@@ -228,6 +229,7 @@ if (Meteor.isServer) {
       authToken: undefined,              // Require this string to be passed in on each request
       apiPath: 'collectionapi',          // API path prefix
       standAlone: false,                 // Run as a stand-alone HTTP(S) server
+      allowCORS: false,                  // Allow CORS (Cross-Origin Resource Sharing)
       sslEnabled: false,                 // Disable/Enable SSL (stand-alone only)
       listenPort: 3005,                  // Port to listen to (stand-alone only)
       listenHost: undefined,             // Host to bind to (stand-alone only)
