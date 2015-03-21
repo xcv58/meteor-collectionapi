@@ -56,7 +56,7 @@ CollectionAPI.prototype.start = function() {
     self._httpServer.addListener('request', function(request, response) {
       new CollectionAPI._requestListener(self, request, response);
       if (self.options.allowCORS === true) {
-        response.setHeader('access-control-allow-origin', '*');
+        response.setHeader('Access-Control-Allow-Origin', '*');
       }
     });
     self._httpServer.listen(self.options.listenPort, self.options.listenHost);
@@ -73,7 +73,7 @@ CollectionAPI.prototype.start = function() {
       self._fiber(function() {
         new CollectionAPI._requestListener(self, req, res);
         if (self.options.allowCORS === true) {
-          res.setHeader('access-control-allow-origin', '*');
+          res.setHeader('Access-Control-Allow-Origin', '*');
         }
       }).run();
     });
