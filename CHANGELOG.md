@@ -1,6 +1,10 @@
+## v0.2.3 (Requires Meteor v1.0.3.2+)
+#### released on 2015-03-20
+* Add CORS (Cross-Origin Resource Sharing) support
+
 ## v0.2.2 (Requires Meteor v1.0.3.2+)
 #### released on 2015-03-20
-* Fix bug when collection path doesn't exist, it try to call authenticate function in option (undefined).
+* Fix bug when collection path doesn't exist, it try to call authenticate function in option (undefined)
 
 ## v0.2.1 (Requires Meteor v1.0.3.2+)
 #### released on 2015-03-19

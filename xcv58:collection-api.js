@@ -1,7 +1,7 @@
 CollectionAPI = function(options) {
   var self = this;
 
-  self.version = '0.2.2';
+  self.version = '0.2.3';
   self._url = Npm.require('url');
   self._querystring = Npm.require('querystring');
   self._fiber = Npm.require('fibers');
@@ -9,6 +9,7 @@ CollectionAPI = function(options) {
   self.options = {
     apiPath: 'collectionapi',
     standAlone: false,
+    allowCORS: false,
     sslEnabled: false,
     listenPort: 3005,
     listenHost: undefined,
@@ -52,7 +53,12 @@ CollectionAPI.prototype.start = function() {
     }
 
     self._httpServer = httpServer.createServer(httpOptions);
-    self._httpServer.addListener('request', function(request, response) { new CollectionAPI._requestListener(self, request, response); });
+    self._httpServer.addListener('request', function(request, response) {
+      new CollectionAPI._requestListener(self, request, response);
+      if (self.options.allowCORS === true) {
+        response.setHeader('access-control-allow-origin', '*');
+      }
+    });
     self._httpServer.listen(self.options.listenPort, self.options.listenHost);
     console.log(startupMessage + ' running as a stand-alone server on ' +  scheme + (self.options.listenHost || 'localhost') + ':' + self.options.listenPort + '/' + (self.options.apiPath || ''));
   } else {
@@ -66,6 +72,9 @@ CollectionAPI.prototype.start = function() {
       }
       self._fiber(function() {
         new CollectionAPI._requestListener(self, req, res);
+        if (self.options.allowCORS === true) {
+          res.setHeader('access-control-allow-origin', '*');
+        }
       }).run();
     });
 
