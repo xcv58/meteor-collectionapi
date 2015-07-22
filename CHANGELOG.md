@@ -1,3 +1,7 @@
+## v0.2.4 (Requires Meteor v1.0.3.2+)
+#### released on 2015-07-22
+* fix bug in CORS (Cross-Origin Resource Sharing) support
+
 ## v0.2.3 (Requires Meteor v1.0.3.2+)
 #### released on 2015-03-20
 * Add CORS (Cross-Origin Resource Sharing) support
