@@ -55,9 +55,6 @@ CollectionAPI.prototype.start = function() {
     self._httpServer = httpServer.createServer(httpOptions);
     self._httpServer.addListener('request', function(request, response) {
       new CollectionAPI._requestListener(self, request, response);
-      if (self.options.allowCORS === true) {
-        response.setHeader('Access-Control-Allow-Origin', '*');
-      }
     });
     self._httpServer.listen(self.options.listenPort, self.options.listenHost);
     console.log(startupMessage + ' running as a stand-alone server on ' +  scheme + (self.options.listenHost || 'localhost') + ':' + self.options.listenPort + '/' + (self.options.apiPath || ''));
@@ -72,9 +69,6 @@ CollectionAPI.prototype.start = function() {
       }
       self._fiber(function() {
         new CollectionAPI._requestListener(self, req, res);
-        if (self.options.allowCORS === true) {
-          res.setHeader('Access-Control-Allow-Origin', '*');
-        }
       }).run();
     });
 
@@ -93,6 +87,9 @@ CollectionAPI._requestListener = function(server, request, response) {
   self._server = server;
   self._request = request;
   self._response = response;
+  if (server.options.allowCORS === true) {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+  }
 
   self._requestUrl = self._server._url.parse(self._request.url, true);
 
