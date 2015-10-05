@@ -97,7 +97,7 @@ curl http://localhost:3000/collectionapi/players/id/field/subfield?query1=1&quer
 
 ```javascript
  requestMetadata = {
-    collectionPath: 'players,
+    collectionPath: 'players',
     collectionId: 'id',
     fields: [ 'field', 'subfield' ],
     query: {
