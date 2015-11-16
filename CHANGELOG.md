@@ -1,3 +1,7 @@
+## v0.2.5 (Requires Meteor v1.0.3.2+)
+#### released on 2015-11-16
+* add timeout in options, special thanks for https://github.com/artem-stepanov
+
 ## v0.2.4 (Requires Meteor v1.0.3.2+)
 #### released on 2015-07-22
 * fix bug in CORS (Cross-Origin Resource Sharing) support
