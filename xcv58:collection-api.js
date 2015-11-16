@@ -15,7 +15,8 @@ CollectionAPI = function(options) {
     listenHost: undefined,
     authToken: undefined,
     privateKeyFile: 'privatekey.pem',
-    certificateFile: 'certificate.pem'
+    certificateFile: 'certificate.pem',
+    timeOut: 120000
   };
   _.extend(self.options, options || {});
 };
@@ -53,6 +54,7 @@ CollectionAPI.prototype.start = function() {
     }
 
     self._httpServer = httpServer.createServer(httpOptions);
+    self._httpServer.setTimeout(self.options.timeOut);
     self._httpServer.addListener('request', function(request, response) {
       new CollectionAPI._requestListener(self, request, response);
     });
