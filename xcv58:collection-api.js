@@ -67,8 +67,8 @@ CollectionAPI.prototype.start = function () {
                     response.send(500, 'TIMEOUT');
                 }
 
-                request.setTimeout(30000, requestTimeout);
-                response.setTimeout(30000, responseTimeout);
+                request.setTimeout(self.options.timeOut, requestTimeout);
+                response.setTimeout(self.options.timeOut, responseTimeout);
             }
             new CollectionAPI._requestListener(self, request, response);
         });
