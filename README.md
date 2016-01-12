@@ -4,8 +4,6 @@ This package is forked from [crazytoad/meteor-collectionapi](https://github.com/
 
 Table of Contents
 =================
-***Warning:*** the table of contents wouldn't in ***Atmosphere***!
-
   * [Collection API](#collection-api)
   * [Installation](#installation)
   * [Quick Setup](#quick-setup)
