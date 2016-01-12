@@ -13,4 +13,5 @@ before_install:
 
 script:
   - "spacejam test-packages ./"
-  - "node xcv58:collection-api.js"
+  - "node collection-api.js"
+  
