@@ -1,7 +1,7 @@
 Package.describe({
   name: 'xcv58:collection-api',
   description: 'Perform CRUD operations on Collections over a RESTful API',
-  version: '0.2.5',
+  version: '0.2.6',
   summary: 'CRUD operations on Collections via HTTP/HTTPS API',
   git: 'https://github.com/xcv58/meteor-collectionapi.git',
   homepage: 'https://github.com/xcv58/meteor-collectionapi',
@@ -14,6 +14,6 @@ Package.onUse(function(api) {
   api.versionsFrom('1.0.3.2');
   api.use('routepolicy', 'server');
   api.use('webapp', 'server');
-  api.addFiles('xcv58:collection-api.js', 'server');
+  api.addFiles('collection-api.js', 'server');
   api.export("CollectionAPI", "server");
 });

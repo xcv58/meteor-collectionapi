@@ -1,3 +1,7 @@
+## v0.2.6 (Requires Meteor v1.0.3.2+)
+#### released on 2016-01-12
+* fix build issue on Windows
+
 ## v0.2.5 (Requires Meteor v1.0.3.2+)
 #### released on 2015-11-16
 * add timeout in options, special thanks for https://github.com/artem-stepanov
