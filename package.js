@@ -1,19 +1,33 @@
+/* global Package, Npm */
+/* eslint-disable func-names, prefer-arrow-callback */
+
 Package.describe({
   name: 'xcv58:collection-api',
   description: 'Perform CRUD operations on Collections over a RESTful API',
-  version: '0.2.6',
+  version: '0.3.0',
   summary: 'CRUD operations on Collections via HTTP/HTTPS API',
   git: 'https://github.com/xcv58/meteor-collectionapi.git',
   homepage: 'https://github.com/xcv58/meteor-collectionapi',
   author: 'Todd Colton, xcv58',
-
-  documentation: 'README.md'
+  documentation: 'README.md',
 });
 
-Package.onUse(function(api) {
-  api.versionsFrom('1.0.3.2');
-  api.use('routepolicy', 'server');
-  api.use('webapp', 'server');
-  api.addFiles('collection-api.js', 'server');
-  api.export("CollectionAPI", "server");
+Npm.depends({
+  url: '0.11.0',
+  querystring: '0.2.0',
+  fibers: '1.0.10',
+  https: '1.0.0',
+});
+
+Package.onUse(function (api) {
+  api.versionsFrom('1.3.1');
+  api.use(['routepolicy', 'webapp', 'ecmascript', 'underscore'], 'server');
+  api.mainModule('server.js', 'server');
+});
+
+Package.onTest(function (api) {
+  api.use('ecmascript');
+  api.use('tinytest');
+  // api.use('my-package');
+  api.mainModule('my-package-tests.js');
 });

@@ -1,0 +1,17 @@
+{
+  "name": "meteor-collectionapi",
+  "private": true,
+  "scripts": {
+    "lint": "eslint ./client ./server --ext .js",
+    "lintfix": "npm run lint -- --fix",
+    "test": "npm run lint",
+    "start": "meteor run"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^2.7.0",
+    "eslint-config-airbnb": "^6.2.0",
+    "eslint-plugin-babel": "^3.2.0",
+    "eslint-plugin-react": "^4.3.0"
+  }
+}
