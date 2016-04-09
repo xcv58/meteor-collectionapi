@@ -4,7 +4,8 @@
   "scripts": {
     "lint": "eslint ./client ./server --ext .js",
     "lintfix": "npm run lint -- --fix",
-    "test": "npm run lint && ava --watch",
+    "test": "npm run lint && ava",
+    "test-watch": "npm run lint && ava --watch",
     "start": "meteor run"
   },
   "ava": {
