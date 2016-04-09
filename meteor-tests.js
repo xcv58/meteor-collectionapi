@@ -1,18 +1,7 @@
 import { Tinytest } from 'meteor/tinytest';
 import { CollectionAPI } from 'meteor/xcv58:collection-api';
 
-const DEFAULT_OPTIONS = {
-  apiPath: 'collectionapi',
-  standAlone: false,
-  allowCORS: false,
-  sslEnabled: false,
-  listenPort: 3005,
-  listenHost: null,
-  authToken: null,
-  privateKeyFile: 'privatekey.pem',
-  certificateFile: 'certificate.pem',
-  timeOut: 120000,
-};
+import { DEFAULT_OPTIONS } from './lib/util';
 
 Tinytest.add('CollectionAPI - import, init, options', test => {
   test.isTrue(Boolean(CollectionAPI), 'CollectionAPI exists!');
