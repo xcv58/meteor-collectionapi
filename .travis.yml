@@ -1,10 +1,9 @@
 # https://github.com/xcv58/meteor-collectionapi
 
-sudo: required
 language: node_js
 
 node_js:
-  - "5"
+  - "0.12"
 
 before_install:
   - "curl https://install.meteor.com | /bin/sh"
