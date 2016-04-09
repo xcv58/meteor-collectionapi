@@ -1,7 +1,7 @@
 import { Tinytest } from 'meteor/tinytest';
 import { CollectionAPI } from 'meteor/xcv58:collection-api';
 
-import { getDefaultOptions } from './lib/util';
+import { getDefaultOptions } from '../lib/util';
 
 Tinytest.add('CollectionAPI - import, init, options', test => {
   test.isTrue(Boolean(CollectionAPI), 'CollectionAPI exists!');

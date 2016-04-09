@@ -2,16 +2,16 @@
   "name": "meteor-collectionapi",
   "private": true,
   "scripts": {
-    "lint": "eslint ./client ./server --ext .js",
+    "lint": "eslint ./meteor/lib ./meteor/tests --ext .js",
     "lintfix": "npm run lint -- --fix",
     "testonly": "ava",
     "test-watch": "npm run testonly -- --watch",
-    "test-meteor": "spacejam test-packages ./",
+    "test-meteor": "spacejam test-packages ./meteor",
     "test": "npm run lint && npm run testonly"
   },
   "ava": {
     "files": [
-      "lib/**/tests/*.js"
+      "meteor/lib/**/tests/*.js"
     ],
     "babel": "inherit"
   },

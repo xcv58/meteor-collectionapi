@@ -22,12 +22,14 @@ Npm.depends({
 Package.onUse(function (api) {
   api.versionsFrom('1.3.1');
   api.use(['routepolicy', 'webapp', 'ecmascript'], 'server');
-  api.mainModule('server.js', 'server');
+  api.use(['ecmascript'], 'client');
+  api.mainModule('lib/index.js', 'server');
+  api.mainModule('lib/client.js', 'client');
 });
 
 Package.onTest(function (api) {
   api.use(['routepolicy', 'webapp', 'ecmascript'], 'server');
   api.use('tinytest');
   api.use('xcv58:collection-api');
-  api.mainModule('meteor-tests.js', 'server');
+  api.mainModule('tests/meteor-tests.js', 'server');
 });

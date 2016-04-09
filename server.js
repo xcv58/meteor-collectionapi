@@ -1,1 +1,0 @@
-export { CollectionAPI } from './lib';
