@@ -12,5 +12,5 @@ before_install:
 
 
 script:
-  - "spacejam test-packages ./"
   - "npm install && npm test"
+  - "spacejam test-packages ./"
