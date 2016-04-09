@@ -4,7 +4,7 @@ sudo: required
 language: node_js
 
 node_js:
-  - "0.12"
+  - "5"
 
 before_install:
   - "curl https://install.meteor.com | /bin/sh"
@@ -13,5 +13,3 @@ before_install:
 
 script:
   - "spacejam test-packages ./"
-  - "node collection-api.js"
-  
