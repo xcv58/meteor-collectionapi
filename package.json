@@ -6,7 +6,7 @@
     "lintfix": "npm run lint -- --fix",
     "test": "npm run lint && ava",
     "test-watch": "npm run lint && ava --watch",
-    "start": "meteor run"
+    "test-meteor": "spacejam test-packages ./"
   },
   "ava": {
     "files": [
@@ -24,6 +24,7 @@
     "eslint": "^2.7.0",
     "eslint-config-airbnb": "^6.2.0",
     "eslint-plugin-babel": "^3.2.0",
-    "eslint-plugin-react": "^4.3.0"
+    "eslint-plugin-react": "^4.3.0",
+    "spacejam": "^1.5.2"
   }
 }

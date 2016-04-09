@@ -3,9 +3,8 @@ machine:
     version: 5.10.0
   pre:
     - "curl https://install.meteor.com | /bin/sh"
-    - "npm install -g spacejam"
 
 test:
   override:
-    - "npm i && npm test"
-    - "spacejam test-packages ./"
+    - "npm test"
+    - "npm run test-meteor"
