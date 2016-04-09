@@ -1,6 +1,7 @@
 # https://github.com/xcv58/meteor-collectionapi
 
 language: node_js
+sudo: required
 
 node_js:
   - "0.12"
