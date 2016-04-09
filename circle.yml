@@ -7,5 +7,5 @@ machine:
 
 test:
   override:
-    - "npm install && npm test"
+    - "npm i && npm test"
     - "spacejam test-packages ./"
