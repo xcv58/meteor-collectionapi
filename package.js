@@ -21,12 +21,12 @@ Npm.depends({
 
 Package.onUse(function (api) {
   api.versionsFrom('1.3.1');
-  api.use(['routepolicy', 'webapp', 'ecmascript', 'underscore'], 'server');
+  api.use(['routepolicy', 'webapp', 'ecmascript'], 'server');
   api.mainModule('server.js', 'server');
 });
 
 Package.onTest(function (api) {
-  api.use(['routepolicy', 'webapp', 'ecmascript', 'underscore'], 'server');
+  api.use(['routepolicy', 'webapp', 'ecmascript'], 'server');
   api.use('tinytest');
   api.use('xcv58:collection-api');
   api.mainModule('meteor-tests.js', 'server');
