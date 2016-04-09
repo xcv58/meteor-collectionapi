@@ -26,8 +26,8 @@ Package.onUse(function (api) {
 });
 
 Package.onTest(function (api) {
-  api.use('ecmascript');
+  api.use(['routepolicy', 'webapp', 'ecmascript', 'underscore'], 'server');
   api.use('tinytest');
-  // api.use('my-package');
-  api.mainModule('my-package-tests.js');
+  api.use('xcv58:collection-api');
+  api.mainModule('meteor-tests.js', 'server');
 });
