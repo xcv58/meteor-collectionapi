@@ -8,3 +8,5 @@ test:
   override:
     - "npm test"
     - "npm run test-meteor"
+    - "npm run test-coverage"
+    - "npm install -g codeclimate-test-reporter && codeclimate-test-reporter < coverage/lcov.info"
