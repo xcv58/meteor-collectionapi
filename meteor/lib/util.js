@@ -15,7 +15,7 @@ const getReturnObject = () => ({ success: false, statusCode: null, body: null })
 
 const isFunction = func => typeof func === 'function';
 
-const getNestedValue = (obj, keys) => {
+const getNestedValue = (obj, keys = []) => {
   let res = obj;
   for (const key of keys) {
     if (Boolean(res)) {
