@@ -40,21 +40,21 @@ test('getNestedValue', t => {
 
   t.is(getNestedValue(null, []), null, 'get undefined if obj is null.');
 
-  // let obj = {};
-  // t.is(getNestedValue(obj, []), obj, 'get origin if keys is [].');
-  //
-  // t.is(getNestedValue(obj, ['key']), undefined, 'get undefined if key not exist.');
-  //
-  // obj = { key: 1 };
-  // t.is(getNestedValue(obj, ['key']), 1, 'get correct value.');
-  //
-  // t.is(getNestedValue(obj, ['key', 'inside']), undefined, 'get undefined if no nested key.');
-  //
-  // obj = { key0: { key1: { key2: { key3: 1 } } } };
-  //
-  // t.is(getNestedValue(obj, ['key0', 'key1', 'key2', 'key3']), 1, 'get correct value.');
-  //
-  // t.is(getNestedValue(obj, ['key0', 'invalidKey', 'key2', 'key3']), undefined, 'get undefined.');
+  let obj = {};
+  t.is(getNestedValue(obj, []), obj, 'get origin if keys is [].');
+
+  t.is(getNestedValue(obj, ['key']), undefined, 'get undefined if key not exist.');
+
+  obj = { key: 1 };
+  t.is(getNestedValue(obj, ['key']), 1, 'get correct value.');
+
+  t.is(getNestedValue(obj, ['key', 'inside']), undefined, 'get undefined if no nested key.');
+
+  obj = { key0: { key1: { key2: { key3: 1 } } } };
+
+  t.is(getNestedValue(obj, ['key0', 'key1', 'key2', 'key3']), 1, 'get correct value.');
+
+  t.is(getNestedValue(obj, ['key0', 'invalidKey', 'key2', 'key3']), undefined, 'get undefined.');
 });
 
 test('getDefaultOptions', t => {
