@@ -7,7 +7,7 @@
     "testonly": "ava",
     "test-watch": "npm run testonly -- --watch",
     "test-meteor": "spacejam test-packages ./meteor",
-    "test": "npm run lint && npm run testonly",
+    "test": "npm run lint && npm run test-coverage",
     "test-coverage": "nyc --reporter=lcov npm run testonly"
   },
   "ava": {
