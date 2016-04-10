@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/xcv58/meteor-collectionapi.svg)](https://travis-ci.org/xcv58/meteor-collectionapi)
+[![Travis](https://img.shields.io/travis/xcv58/meteor-collectionapi.svg?style=flat-square)]()
+[![CircleCI](https://img.shields.io/circleci/project/xcv58/meteor-collectionapi.svg?style=flat-square)]()
+[![Code Climate](https://img.shields.io/codeclimate/github/xcv58/meteor-collectionapi.svg?style=flat-square)]()
 
 This package is forked from [crazytoad/meteor-collectionapi](https://github.com/crazytoad/meteor-collectionapi)
 
