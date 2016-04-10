@@ -1,6 +1,7 @@
 [![Travis](https://img.shields.io/travis/xcv58/meteor-collectionapi.svg?style=flat-square)](https://travis-ci.org/xcv58/meteor-collectionapi)
 [![CircleCI](https://img.shields.io/circleci/project/xcv58/meteor-collectionapi.svg?style=flat-square)](https://circleci.com/gh/xcv58/meteor-collectionapi)
 [![Code Climate](https://img.shields.io/codeclimate/github/xcv58/meteor-collectionapi.svg?style=flat-square)](https://codeclimate.com/github/xcv58/meteor-collectionapi)
+[![Test Coverage](https://codeclimate.com/github/xcv58/meteor-collectionapi/badges/coverage.svg)](https://codeclimate.com/github/xcv58/meteor-collectionapi/coverage)
 
 This package is forked from [crazytoad/meteor-collectionapi](https://github.com/crazytoad/meteor-collectionapi)
 

@@ -57,7 +57,6 @@ test('getNestedValue', t => {
   t.is(getNestedValue(obj, ['key0', 'invalidKey', 'key2', 'key3']), undefined, 'get undefined.');
 });
 
-
 test('getDefaultOptions', t => {
   t.true(isFunction(getDefaultOptions), 'getDefaultOptions is a function.');
 
