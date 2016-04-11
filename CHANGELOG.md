@@ -1,3 +1,7 @@
+## v0.3.0 (Requires Meteor v1.3.1+)
+#### released on 2016-04-10
+* rewrite entirely via ECMAScript 2015 without breaking change
+
 ## v0.2.6 (Requires Meteor v1.0.3.2+)
 #### released on 2016-01-12
 * fix build issue on Windows

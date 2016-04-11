@@ -9,7 +9,7 @@ Package.describe({
   git: 'https://github.com/xcv58/meteor-collectionapi.git',
   homepage: 'https://github.com/xcv58/meteor-collectionapi',
   author: 'Todd Colton, xcv58',
-  documentation: 'README.md',
+  documentation: '../README.md',
 });
 
 Npm.depends({
