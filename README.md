@@ -1,8 +1,12 @@
 [![Travis](https://img.shields.io/travis/xcv58/meteor-collectionapi.svg?style=flat-square)](https://travis-ci.org/xcv58/meteor-collectionapi)
 [![CircleCI](https://img.shields.io/circleci/project/xcv58/meteor-collectionapi.svg?style=flat-square)](https://circleci.com/gh/xcv58/meteor-collectionapi)
+[![Requires.io](https://img.shields.io/requires/github/xcv58/meteor-collectionapi.svg?maxAge=2592000?style=flat-square)](https://requires.io/github/xcv58/meteor-collectionapi/requirements/?branch=master)
+[![Codacy](https://img.shields.io/codacy/243378a19eb94a5da95b7b26c950a266.svg?maxAge=2592000?style=flat-square)](https://www.codacy.com/app/chenyihonglove/meteor-collectionapi)
+[![SensioLabs Insight](https://img.shields.io/sensiolabs/i/6547e47a-9479-43c3-a733-28f1b18e3d65.svg?maxAge=2592000?style=flat-square)](https://insight.sensiolabs.com/projects/6547e47a-9479-43c3-a733-28f1b18e3d65)
 [![Code Climate](https://img.shields.io/codeclimate/github/xcv58/meteor-collectionapi.svg?style=flat-square)](https://codeclimate.com/github/xcv58/meteor-collectionapi)
 [![Code Climate](https://img.shields.io/codeclimate/coverage/github/xcv58/meteor-collectionapi.svg?maxAge=2592000?style=flat-square)](https://codeclimate.com/github/xcv58/meteor-collectionapi/coverage)
-[![Code Climate](https://img.shields.io/codeclimate/issues/github/xcv58/meteor-collectionapi.svg?maxAge=2592000?style=flat-square)](https://codeclimate.com/github/xcv58/meteor-collectionapi)
+
+[![GitHub issues](https://img.shields.io/github/issues/xcv58/meteor-collectionapi.svg?maxAge=2592000?style=flat-square)](https://github.com/xcv58/meteor-collectionapi/issues)
 
 This package is forked from [crazytoad/meteor-collectionapi](https://github.com/crazytoad/meteor-collectionapi)
 
