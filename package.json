@@ -14,7 +14,15 @@
     "files": [
       "meteor/lib/**/tests/*.js"
     ],
+    "source": [
+      "meteor/lib/*.js"
+    ],
     "babel": "inherit"
+  },
+  "nyc": {
+    "include": [
+      "meteor/lib/*.js"
+    ]
   },
   "dependencies": {},
   "devDependencies": {
