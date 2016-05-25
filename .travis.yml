@@ -11,5 +11,5 @@ before_install:
 
 script:
   - "npm test"
-  - "npm run test-meteor"
+  - "npm install -g coffee-script && npm run test-meteor"
   - "npm install -g codeclimate-test-reporter && codeclimate-test-reporter < coverage/lcov.info"
