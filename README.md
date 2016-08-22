@@ -46,6 +46,9 @@ Quick Setup
 -------
 
 ```javascript
+
+
+
 Players = new Meteor.Collection("players");
 
 if (Meteor.isServer) {
@@ -93,6 +96,9 @@ if (Meteor.isServer) {
   });
 }
 ```
+
+Newer configurations of Meteor may require `import { CollectionAPI } from 'meteor/xcv58:collection-api';`.
+
 
 Note that requestMetadata is a JSONObject that contains
 ```collectionPath```, ```collectionId```, ```fields```, and ```query``` from request.
