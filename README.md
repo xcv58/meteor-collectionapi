@@ -32,8 +32,6 @@ Current version: 0.3.0 ***(Requires Meteor v1.3.1+)***
 ***Warning: versions 0.1.18+ are not compatible with versions less than 0.1.18 if you use before functions!***
 Because we change the before functions call parameters.
 
-Please use `meteor add xcv58:collection-api@=0.2.6` to install `0.2.6` if you got `No compatible binary build found for this package` error.
-
 Installation
 -------
 
@@ -43,6 +41,9 @@ Just run this in your app:
 
 It's that easy! Be sure to check out other cool packages over at [Atmosphere](https://atmosphere.meteor.com/).
 
+## Windows support
+
+Please use `meteor add xcv58:collection-api@=0.2.6` to install `0.2.6` if you got `No compatible binary build found for this package` error.
 
 Quick Setup
 -------
