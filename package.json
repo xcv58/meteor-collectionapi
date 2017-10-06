@@ -1,0 +1,41 @@
+{
+  "name": "meteor-collectionapi",
+  "private": true,
+  "scripts": {
+    "lint": "eslint ./meteor/lib ./meteor/tests --ext .js",
+    "lintfix": "npm run lint -- --fix",
+    "testonly": "ava",
+    "test-watch": "npm run testonly -- --watch",
+    "test-meteor": "spacejam test-packages ./meteor",
+    "test": "npm run lint && npm run test-coverage",
+    "test-coverage": "nyc --reporter=lcov npm run testonly"
+  },
+  "ava": {
+    "files": [
+      "meteor/lib/**/tests/*.js"
+    ],
+    "source": [
+      "meteor/lib/*.js"
+    ],
+    "babel": "inherit"
+  },
+  "nyc": {
+    "include": [
+      "meteor/lib/*.js"
+    ]
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "ava": "^0.14.0",
+    "babel": "^6.5.2",
+    "babel-core": "^6.7.6",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-stage-3": "^6.5.0",
+    "eslint": "^2.7.0",
+    "eslint-config-airbnb": "^6.2.0",
+    "eslint-plugin-babel": "^3.2.0",
+    "eslint-plugin-react": "^4.3.0",
+    "nyc": "^6.2.1",
+    "spacejam": "^1.5.2"
+  }
+}

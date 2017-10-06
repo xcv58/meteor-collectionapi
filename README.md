@@ -1,11 +1,17 @@
-[![Build Status](https://travis-ci.org/xcv58/meteor-collectionapi.svg)](https://travis-ci.org/xcv58/meteor-collectionapi)
+[![Travis](https://img.shields.io/travis/xcv58/meteor-collectionapi.svg?style=flat-square)](https://travis-ci.org/xcv58/meteor-collectionapi)
+[![CircleCI](https://img.shields.io/circleci/project/xcv58/meteor-collectionapi.svg?style=flat-square)](https://circleci.com/gh/xcv58/meteor-collectionapi)
+[![Requires.io](https://img.shields.io/requires/github/xcv58/meteor-collectionapi.svg?maxAge=2592000?style=flat-square)](https://requires.io/github/xcv58/meteor-collectionapi/requirements/?branch=master)
+[![Codacy](https://img.shields.io/codacy/243378a19eb94a5da95b7b26c950a266.svg?maxAge=2592000?style=flat-square)](https://www.codacy.com/app/chenyihonglove/meteor-collectionapi)
+[![SensioLabs Insight](https://img.shields.io/sensiolabs/i/6547e47a-9479-43c3-a733-28f1b18e3d65.svg?maxAge=2592000?style=flat-square)](https://insight.sensiolabs.com/projects/6547e47a-9479-43c3-a733-28f1b18e3d65)
+[![Code Climate](https://img.shields.io/codeclimate/github/xcv58/meteor-collectionapi.svg?style=flat-square)](https://codeclimate.com/github/xcv58/meteor-collectionapi)
+[![Code Climate](https://img.shields.io/codeclimate/coverage/github/xcv58/meteor-collectionapi.svg?maxAge=2592000?style=flat-square)](https://codeclimate.com/github/xcv58/meteor-collectionapi/coverage)
+
+[![GitHub issues](https://img.shields.io/github/issues/xcv58/meteor-collectionapi.svg?maxAge=2592000?style=flat-square)](https://github.com/xcv58/meteor-collectionapi/issues)
 
 This package is forked from [crazytoad/meteor-collectionapi](https://github.com/crazytoad/meteor-collectionapi)
 
 Table of Contents
 =================
-***Warning:*** the table of contents wouldn't in ***Atmosphere***!
-
   * [Collection API](#collection-api)
   * [Installation](#installation)
   * [Quick Setup](#quick-setup)
@@ -21,7 +27,7 @@ Collection API
 Easily perform [CRUD](http://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations on Meteor Collections over HTTP/HTTPS from outside of the Meteor client or server environment.
 
 
-Current version: 0.2.4  ***(Requires Meteor v1.0.3.2+)***
+Current version: 0.3.0 ***(Requires Meteor v1.3.1+)***
 
 ***Warning: versions 0.1.18+ are not compatible with versions less than 0.1.18 if you use before functions!***
 Because we change the before functions call parameters.
@@ -35,11 +41,17 @@ Just run this in your app:
 
 It's that easy! Be sure to check out other cool packages over at [Atmosphere](https://atmosphere.meteor.com/).
 
+## Windows support
+
+Please use `meteor add xcv58:collection-api@=0.2.6` to install `0.2.6` if you got `No compatible binary build found for this package` error.
 
 Quick Setup
 -------
 
 ```javascript
+
+
+
 Players = new Meteor.Collection("players");
 
 if (Meteor.isServer) {
@@ -55,7 +67,8 @@ if (Meteor.isServer) {
       listenPort: 3005,                  // Port to listen to (stand-alone only)
       listenHost: undefined,             // Host to bind to (stand-alone only)
       privateKeyFile: 'privatekey.pem',  // SSL private key file (only used if SSL is enabled)
-      certificateFile: 'certificate.pem' // SSL certificate key file (only used if SSL is enabled)
+      certificateFile: 'certificate.pem', // SSL certificate key file (only used if SSL is enabled)
+      timeOut: 120000
     });
 
     // Add the collection Players to the API "/players" path
@@ -86,6 +99,9 @@ if (Meteor.isServer) {
   });
 }
 ```
+
+Newer configurations of Meteor may require `import { CollectionAPI } from 'meteor/xcv58:collection-api';`.
+
 
 Note that requestMetadata is a JSONObject that contains
 ```collectionPath```, ```collectionId```, ```fields```, and ```query``` from request.
@@ -234,7 +250,8 @@ if (Meteor.isServer) {
       listenPort: 3005,                  // Port to listen to (stand-alone only)
       listenHost: undefined,             // Host to bind to (stand-alone only)
       privateKeyFile: 'privatekey.pem',  // SSL private key file (only used if SSL is enabled)
-      certificateFile: 'certificate.pem' // SSL certificate key file (only used if SSL is enabled)
+      certificateFile: 'certificate.pem', // SSL certificate key file (only used if SSL is enabled)
+      timeOut: 120000
     });
 
     // Add the collection Players to the API "/players" path

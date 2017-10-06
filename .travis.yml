@@ -1,16 +1,15 @@
 # https://github.com/xcv58/meteor-collectionapi
 
-sudo: required
 language: node_js
+sudo: required
 
 node_js:
   - "0.12"
 
 before_install:
   - "curl https://install.meteor.com | /bin/sh"
-  - "npm install -g spacejam"
-
 
 script:
-  - "spacejam test-packages ./"
-  - "node xcv58:collection-api.js"
+  - "npm test"
+  - "npm install -g coffee-script && npm run test-meteor"
+  - "npm install -g codeclimate-test-reporter && codeclimate-test-reporter < coverage/lcov.info"
