@@ -2,337 +2,343 @@ import fibers from 'fibers';
 import url from 'url';
 import querystring from 'querystring';
 
-import { isFunction, getReturnObject, getNestedValue } from './util';
-const { stringify } = JSON;
+import {isFunction, getReturnObject, getNestedValue} from './util';
+
+const {stringify} = JSON;
 
 class RequestListener {
-  constructor(server, request, response) {
-    this._server = server;
-    this._request = request;
-    this._response = response;
+    constructor(server, request, response) {
+        this._server = server;
+        this._request = request;
+        this._response = response;
 
-    if (server.options.allowCORS === true) {
-      response.setHeader('Access-Control-Allow-Origin', '*');
-    }
+        if (server.options.allowCORS === true) {
+            response.setHeader('Access-Control-Allow-Origin', '*');
+        }
 
-    this._requestUrl = url.parse(this._request.url, true);
+        this._requestUrl = url.parse(this._request.url, true);
 
-    // Check for the X-Auth-Token header or auth-token in the query string
-    this._requestAuthToken = this._request.headers['x-auth-token'];
-    if (!this._requestAuthToken) {
-      this._requestAuthToken = querystring.parse(this._requestUrl.query)['auth-token'];
-    }
+        // Check for the X-Auth-Token header or auth-token in the query string
+        this._requestAuthToken = this._request.headers['x-auth-token'];
+        if (!this._requestAuthToken) {
+            this._requestAuthToken = querystring.parse(this._requestUrl.query)['auth-token'];
+        }
 
-    let requestPath;
-    let pathName = this._requestUrl.pathname;
-    if (pathName.charAt(pathName.length - 1) === '/') {
-      pathName = pathName.substring(0, pathName.length - 1);
-    }
+        let requestPath;
+        let pathName = this._requestUrl.pathname;
+        if (pathName.charAt(pathName.length - 1) === '/') {
+            pathName = pathName.substring(0, pathName.length - 1);
+        }
 
-    if (this._server.options.standAlone === true && !this._server.options.apiPath) {
-      requestPath = pathName.split('/').slice(1);
-    } else {
-      requestPath = pathName.split('/').slice(2);
-    }
-
-    this._requestPath = {
-      collectionPath: requestPath[0],
-      collectionId: requestPath[1],
-      fields: requestPath.slice(2),
-      query: this._requestUrl.query,
-    };
-
-    this._collectionOptions = this._server._getCollectionOptions(this._requestPath);
-    this._requestCollection = this._server._getCollection(this._requestPath);
-
-    if (!this._requestCollection) {
-      return this._notFoundResponse('Collection Object Not Found');
-    }
-
-    if (!this._authenticate(this._requestAuthToken, this._request.method, this._requestPath)) {
-      return this._unauthorizedResponse('Invalid/Missing Auth Token');
-    }
-
-    return this._handleRequest();
-  }
-
-  _authenticate(...args) {
-    const collectionOptions = this._collectionOptions;
-    let authCount = 0;
-
-    // Check the global auth token
-    if (this._server.options.authToken) {
-      authCount++;
-      if (this._requestAuthToken === this._server.options.authToken) {
-        return true;
-      }
-    }
-
-    // Check the collection's auth token
-    if (collectionOptions && collectionOptions.authToken) {
-      authCount++;
-      if (this._requestAuthToken === collectionOptions.authToken) {
-        return true;
-      }
-    }
-
-    const { authenticate } = collectionOptions;
-    if (!authCount && authenticate && isFunction(authenticate)) {
-      authCount++;
-      if (authenticate.apply(this, args)) {
-        return true;
-      }
-    }
-
-    return authCount === 0;
-  }
-
-  _handleRequest() {
-    const { method } = this._request;
-
-    if (!this._requestMethodAllowed(method)) {
-      return this._notSupportedResponse();
-    }
-
-    const func = this[method.toLowerCase()];
-    if (isFunction(func)) {
-      return func.apply(this);
-    }
-
-    return this._notSupportedResponse();
-  }
-
-  _requestMethodAllowed(method) {
-    const collectionOptions = this._collectionOptions;
-
-    const { methods = [] } = collectionOptions || {};
-    return methods.indexOf(method) >= 0;
-  }
-
-  _handleHooks(hook, method, args) {
-    const func = getNestedValue(this._collectionOptions, [hook, method]);
-    if (isFunction(func)) {
-      return func.apply(this, args);
-    }
-
-    return true;
-  }
-
-  _beforeHandling(method, ...args) {
-    return this._handleHooks.apply(this, ['before', method, args]);
-  }
-
-  _afterHandling(method, ...args) {
-    return this._handleHooks.apply(this, ['after', method, args]);
-  }
-
-  _handleReturnObject(method, returnObject) {
-    if (returnObject.success && returnObject.statusCode && returnObject.body) {
-      this._afterHandling(method);
-      return this._sendResponse(returnObject.statusCode, stringify(returnObject.body));
-    }
-    return false;
-  }
-
-  get(fromRequest = 'GET') {
-    fibers(() => {
-      try {
-        const { collectionId } = this._requestPath;
-        let cursor = null;
-        if (collectionId) {
-          cursor = this._requestCollection.find(this._requestPath.collectionId);
+        if (this._server.options.standAlone === true && !this._server.options.apiPath) {
+            requestPath = pathName.split('/').slice(1);
         } else {
-          cursor = this._requestCollection.find();
+            requestPath = pathName.split('/').slice(2);
         }
 
-        const records = cursor.fetch();
+        this._requestPath = {
+            collectionPath: requestPath[0],
+            collectionId: requestPath[1],
+            fields: requestPath.slice(2),
+            query: this._requestUrl.query,
+        };
 
-        const returnObject = getReturnObject();
+        this._collectionOptions = this._server._getCollectionOptions(this._requestPath);
+        this._requestCollection = this._server._getCollection(this._requestPath);
 
-        if (!this._beforeHandling('GET', records, this._requestPath, returnObject)) {
-          if (fromRequest) {
-            if (records.length) {
-              return this._noContentResponse();
+        if (!this._requestCollection) {
+            return this._notFoundResponse('Collection Object Not Found');
+        }
+
+        if (!this._authenticate(this._requestAuthToken, this._request.method, this._requestPath)) {
+            return this._unauthorizedResponse('Invalid/Missing Auth Token');
+        }
+
+        return this._handleRequest();
+    }
+
+    _authenticate(...args) {
+        const collectionOptions = this._collectionOptions;
+        let authCount = 0;
+
+        // Check the global auth token
+        if (this._server.options.authToken) {
+            authCount++;
+            if (this._requestAuthToken === this._server.options.authToken) {
+                return true;
             }
-            return this._notFoundResponse('No Record(s) Found');
-          }
-          return this._rejectedResponse('Could not get that collection/object.');
         }
 
-        if (this._handleReturnObject('GET', returnObject)) {
-          return true;
+        // Check the collection's auth token
+        if (collectionOptions && collectionOptions.authToken) {
+            authCount++;
+            if (this._requestAuthToken === collectionOptions.authToken) {
+                return true;
+            }
         }
 
-        if (records.length === 0) {
-          return this._notFoundResponse('No Record(s) Found');
+        const {authenticate} = collectionOptions;
+        if (!authCount && authenticate && isFunction(authenticate)) {
+            authCount++;
+            if (authenticate.apply(this, args)) {
+                return true;
+            }
         }
 
-        this._afterHandling('GET');
-
-        if (fromRequest === 'POST') {
-          return this._createdResponse(stringify(records));
-        }
-
-        return this._okResponse(stringify(records));
-      } catch (e) {
-        return this._internalServerErrorResponse(e);
-      }
-    }).run();
-  }
-
-  put() {
-    if (!this._requestPath.collectionId) {
-      return this._notFoundResponse('Missing _id');
+        return authCount === 0;
     }
 
-    let requestData = '';
+    _handleRequest() {
+        const {method} = this._request;
 
-    this._request.on('data', chunk => {
-      requestData += chunk.toString();
-    });
-
-    return this._request.on('end', () => {
-      fibers(() => {
-        try {
-          const obj = JSON.parse(requestData);
-
-          const returnObject = getReturnObject();
-
-          if (!this._beforeHandling(
-            'PUT',
-            this._requestCollection.findOne(this._requestPath.collectionId),
-            obj,
-            this._requestPath,
-            returnObject
-          )) {
-            return this._rejectedResponse('Could not put that object.');
-          }
-
-          if (this._handleReturnObject('PUT', returnObject)) {
-            return true;
-          }
-
-          this._requestCollection.update(this._requestPath.collectionId, obj);
-        } catch (e) {
-          return this._internalServerErrorResponse(e);
+        if (!this._requestMethodAllowed(method)) {
+            return this._notSupportedResponse();
         }
 
-        this._afterHandling('PUT');
-        if (this._requestPath.query.callback === '0') {
-          return this._createdResponse(stringify({ status: 'success' }));
+        const func = this[method.toLowerCase()];
+        if (isFunction(func)) {
+            return func.apply(this);
         }
-        return this.get('PUT');
-      }).run();
-    });
-  }
 
-  delete() {
-    if (!this._requestPath.collectionId) {
-      return this._notFoundResponse('Missing _id');
+        return this._notSupportedResponse();
     }
 
-    return fibers(() => {
-      try {
-        const returnObject = getReturnObject();
+    _requestMethodAllowed(method) {
+        const collectionOptions = this._collectionOptions;
 
-        if (!this._beforeHandling(
-          'DELETE',
-          this._requestCollection.findOne(this._requestPath.collectionId),
-          this._requestPath,
-          returnObject
-        )) {
-          return this._rejectedResponse('Could not delete that object.');
+        const {methods = []} = collectionOptions || {};
+        return methods.indexOf(method) >= 0;
+    }
+
+    _handleHooks(hook, method, args) {
+        const func = getNestedValue(this._collectionOptions, [hook, method]);
+        if (isFunction(func)) {
+            return func.apply(this, args);
         }
 
-        if (this._handleReturnObject('DELETE', returnObject)) {
-          return true;
+        return true;
+    }
+
+    _beforeHandling(method, ...args) {
+        return this._handleHooks.apply(this, ['before', method, args]);
+    }
+
+    _afterHandling(method, ...args) {
+        return this._handleHooks.apply(this, ['after', method, args]);
+    }
+
+    _handleReturnObject(method, returnObject) {
+        if (returnObject.success && returnObject.statusCode && returnObject.body) {
+            this._afterHandling(method);
+            return this._sendResponse(returnObject.statusCode, stringify(returnObject.body));
+        }
+        return false;
+    }
+
+    get(fromRequest = 'GET') {
+        fibers(() => {
+            try {
+                const {collectionId} = this._requestPath;
+                let cursor = null;
+                if (collectionId) {
+                    cursor = this._requestCollection.find(this._requestPath.collectionId);
+                } else {
+                    cursor = this._requestCollection.find();
+                }
+
+                const records = cursor.fetch();
+
+                const returnObject = getReturnObject();
+
+                if (!this._beforeHandling('GET', records, this._requestPath, returnObject)) {
+                    if (fromRequest) {
+                        if (records.length) {
+                            return this._noContentResponse();
+                        }
+                        return this._notFoundResponse('No Record(s) Found');
+                    }
+                    return this._rejectedResponse('Could not get that collection/object.');
+                }
+
+                if (this._handleReturnObject('GET', returnObject)) {
+                    return true;
+                }
+
+                if (records.length === 0) {
+                    return this._notFoundResponse('No Record(s) Found');
+                }
+
+                this._afterHandling('GET');
+
+                if (fromRequest === 'POST') {
+                    return this._createdResponse(stringify(records));
+                }
+
+                return this._okResponse(stringify(records));
+            } catch (e) {
+                return this._internalServerErrorResponse(e);
+            }
+        }).run();
+    }
+
+    put() {
+        if (!this._requestPath.collectionId) {
+            return this._notFoundResponse('Missing _id');
         }
 
-        this._requestCollection.remove(this._requestPath.collectionId);
-      } catch (e) {
-        return this._internalServerErrorResponse(e);
-      }
-      this._afterHandling('DELETE');
-      return this._okResponse('');
-    }).run();
-  }
+        let requestData = '';
 
-  post() {
-    let requestData = '';
+        this._request.on('data', chunk => {
+            requestData += chunk.toString();
+        });
 
-    this._request.on('data', chunk => {
-      requestData += chunk.toString();
-    });
+        return this._request.on('end', () => {
+            fibers(() => {
+                try {
+                    const obj = JSON.parse(requestData);
 
-    this._request.on('end', () => {
-      fibers(() => {
-        try {
-          const obj = JSON.parse(requestData);
+                    const returnObject = getReturnObject();
 
-          const returnObject = getReturnObject();
+                    if (!this._beforeHandling(
+                            'PUT',
+                            this._requestCollection.findOne(this._requestPath.collectionId),
+                            obj,
+                            this._requestPath,
+                            returnObject
+                        )) {
+                        return this._rejectedResponse('Could not put that object.');
+                    }
 
-          if (!this._beforeHandling('POST', obj, this._requestPath, returnObject)) {
-            return this._rejectedResponse('Could not post that object.');
-          }
+                    if (this._handleReturnObject('PUT', returnObject)) {
+                        return true;
+                    }
 
-          if (this._handleReturnObject('POST', returnObject)) {
-            return true;
-          }
+                    this._requestCollection.update(this._requestPath.collectionId, obj);
+                } catch (e) {
+                    return this._internalServerErrorResponse(e);
+                }
 
-          this._requestPath.collectionId = this._requestCollection.insert(obj);
-        } catch (e) {
-          return this._internalServerErrorResponse(e);
+                this._afterHandling('PUT');
+                if (this._requestPath.query.callback === '0') {
+                    return this._createdResponse(stringify({status: 'success'}));
+                }
+                return this.get('PUT');
+            }).run();
+        });
+    }
+
+    delete() {
+        if (!this._requestPath.collectionId) {
+            return this._notFoundResponse('Missing _id');
         }
-        this._afterHandling('POST');
-        return this.get('POST');
-      }).run();
-    });
-  }
 
-  _okResponse(body) {
-    this._sendResponse(200, body);
-  }
+        return fibers(() => {
+            try {
+                const returnObject = getReturnObject();
 
-  _createdResponse(body) {
-    this._sendResponse(201, body);
-  }
+                if (!this._beforeHandling(
+                        'DELETE',
+                        this._requestCollection.findOne(this._requestPath.collectionId),
+                        this._requestPath,
+                        returnObject
+                    )) {
+                    return this._rejectedResponse('Could not delete that object.');
+                }
 
-  _noContentResponse() {
-    this._sendResponse(204, '');
-  }
+                if (this._handleReturnObject('DELETE', returnObject)) {
+                    return true;
+                }
 
-  _notSupportedResponse() {
-    this._sendResponse(501, '');
-  }
+                this._requestCollection.remove(this._requestPath.collectionId);
+            } catch (e) {
+                return this._internalServerErrorResponse(e);
+            }
+            this._afterHandling('DELETE');
+            return this._okResponse('');
+        }).run();
+    }
 
-  _unauthorizedResponse(body) {
-    this._sendResponse(401, stringify({ message: body.toString() }));
-  }
+    post() {
+        let requestData = '';
 
-  _notFoundResponse(body) {
-    this._sendResponse(404, stringify({ message: body.toString() }));
-  }
+        this._request.on('data', chunk => {
+            requestData += chunk.toString();
+        });
 
-  _rejectedResponse(body) {
-    this._sendResponse(409, stringify({ message: body.toString() }));
-  }
+        this._request.on('end', () => {
+            fibers(() => {
+                try {
+                    let obj;
+                    if (this._server.options.parsePostJson) {
+                        obj = JSON.parse(requestData);
+                    } else {
+                        obj = requestData;
+                    }
 
-  _internalServerErrorResponse(body) {
-    this._sendResponse(500, stringify({ error: body.toString() }));
-  }
+                    const returnObject = getReturnObject();
 
-  _notSupportedResponse() {
-    this._sendResponse(501, '');
-  }
+                    if (!this._beforeHandling('POST', obj, this._requestPath, returnObject)) {
+                        return this._rejectedResponse('Could not post that object.');
+                    }
 
-  _sendResponse(statusCode, body) {
-    this._response.statusCode = statusCode;
-    this._response.setHeader('Content-Length', Buffer.byteLength(body, 'utf8'));
-    this._response.setHeader('Content-Type', 'application/json');
-    this._response.write(body);
-    this._response.end();
-    return true;
-  }
+                    if (this._handleReturnObject('POST', returnObject)) {
+                        return true;
+                    }
+
+                    this._requestPath.collectionId = this._requestCollection.insert(obj);
+                } catch (e) {
+                    return this._internalServerErrorResponse(e);
+                }
+                this._afterHandling('POST');
+                return this.get('POST');
+            }).run();
+        });
+    }
+
+    _okResponse(body) {
+        this._sendResponse(200, body);
+    }
+
+    _createdResponse(body) {
+        this._sendResponse(201, body);
+    }
+
+    _noContentResponse() {
+        this._sendResponse(204, '');
+    }
+
+    _notSupportedResponse() {
+        this._sendResponse(501, '');
+    }
+
+    _unauthorizedResponse(body) {
+        this._sendResponse(401, stringify({message: body.toString()}));
+    }
+
+    _notFoundResponse(body) {
+        this._sendResponse(404, stringify({message: body.toString()}));
+    }
+
+    _rejectedResponse(body) {
+        this._sendResponse(409, stringify({message: body.toString()}));
+    }
+
+    _internalServerErrorResponse(body) {
+        this._sendResponse(500, stringify({error: body.toString()}));
+    }
+
+    _notSupportedResponse() {
+        this._sendResponse(501, '');
+    }
+
+    _sendResponse(statusCode, body) {
+        this._response.statusCode = statusCode;
+        this._response.setHeader('Content-Length', Buffer.byteLength(body, 'utf8'));
+        this._response.setHeader('Content-Type', 'application/json');
+        this._response.write(body);
+        this._response.end();
+        return true;
+    }
 }
 
-export { RequestListener };
+export {RequestListener};

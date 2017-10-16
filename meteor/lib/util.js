@@ -9,6 +9,7 @@ const getDefaultOptions = () => ({
     privateKeyFile: 'privatekey.pem',
     certificateFile: 'certificate.pem',
     timeOut: 120000,
+    parsePostJson: true
 });
 
 const getReturnObject = () => ({ success: false, statusCode: null, body: null });
